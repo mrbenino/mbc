@@ -1,0 +1,19 @@
+* {
+  font-family: 'Goudy Bookletter 1911', serif !important;
+  scroll-behavior: smooth;
+}
+.custom-header .grid.grid--no-gutters.grid--table.site-header__mobile-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.custom-header .grid__item.medium-up--one-quarter.logo-align--left,
+.custom-header .grid__item.medium-up--one-half.small--hide,
+.custom-header .grid__item.medium-up--one-quarter.text-right.site-header__icons {
+  width: auto;
+}
+
+.custom-header .grid__item.medium-up--one-half.small--hide {
+  margin-left: auto;
+}
