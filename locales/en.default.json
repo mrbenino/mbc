@@ -56,7 +56,7 @@
         "other": "{{ count }} results for “{{ terms }}”"
       },
       "title": "Search our site",
-      "placeholder": "Search",
+      "placeholder": "Type your search",
       "submit": "Submit",
       "close": "Close search",
       "heading": {

@@ -68,24 +68,24 @@
           {{ money_price }}
         </span>
       </dd>
-      <dt>
-        <span class="visually-hidden visually-hidden--inline">{{ 'products.product.regular_price' | t }}</span>
-      </dt>
-      <dd>
-        <s class="price-item price-item--regular" data-regular-price>
-          {{ compare_at_price | money }}
-        </s>
-      </dd>
+      {% comment %}<dt>{% endcomment %}
+        {% comment %}<span class="visually-hidden visually-hidden--inline">{{ 'products.product.regular_price' | t }}</span>{% endcomment %}
+      {% comment %}</dt>{% endcomment %}
+      {% comment %}<dd>{% endcomment %}
+        {% comment %}<s class="price-item price-item--regular" data-regular-price>{% endcomment %}
+          {% comment %}{{ compare_at_price | money }}{% endcomment %}
+        {% comment %}</s>{% endcomment %}
+      {% comment %}</dd>{% endcomment %}
     </div>
-    <div class="price__badges">
-      <span class="price__badge price__badge--sale" aria-hidden="true">
-        <span>{{ 'products.product.on_sale' | t }}</span>
-      </span>
-      <span class="price__badge price__badge--sold-out">
-        <span>{{ 'products.product.sold_out' | t }}</span>
-      </span>
-    </div>
-  </div>
+    {% comment %}<div class="price__badges">{% endcomment %}
+      {% comment %}<span class="price__badge price__badge--sale" aria-hidden="true">{% endcomment %}
+        {% comment %}<span>{{ 'products.product.on_sale' | t }}</span>{% endcomment %}
+      {% comment %}</span>{% endcomment %}
+      {% comment %}<span class="price__badge price__badge--sold-out">{% endcomment %}
+        {% comment %}<span>{{ 'products.product.sold_out' | t }}</span>{% endcomment %}
+      {% comment %}</span>{% endcomment %}
+    {% comment %}</div>{% endcomment %}
+  {% comment %}</div>{% endcomment %}
   <div class="price__unit">
     <dt>
       <span class="visually-hidden visually-hidden--inline">{{ 'products.product.unit_price_label' | t }}</span>

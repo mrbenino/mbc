@@ -35,8 +35,9 @@
       {%- assign enable_image_zoom = false -%}
   {% endcase %}
 
-  <div class="grid product-single{% if section.settings.enable_payment_button %} product-single--{{ section.settings.media_size }}-media{% endif %}">
-    <div class="grid__item product-single__media-group {{ product_media_width }}{% if section.settings.media_size == 'full' %} product-single__media-group--full{% endif %}" data-product-single-media-group>
+
+  <div class="custom-grid grid product-single{% if section.settings.enable_payment_button %} product-single--{{ section.settings.media_size }}-media{% endif %}">
+    <div class="custom-gallery grid__item product-single__media-group {{ product_media_width }}{% if section.settings.media_size == 'full' %} product-single__media-group--full{% endif %}" data-product-single-media-group>
       {%- assign featured_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media -%}
 
       {%- for media in product.media -%}
@@ -137,109 +138,115 @@
         <h1 class="product-single__title">{{ product.title }}</h1>
         <script>window.performance.mark('debut:product:title_visible');</script>
 
-          <div class="product__price">
-            {% include 'product-price', variant: current_variant, show_vendor: section.settings.show_vendor %}
-          </div>
+        {% form 'product', product, class:form_classes, novalidate: 'novalidate', data-product-form: '' %}
+          {{ form | payment_terms }}
 
-          {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
-            <div class="product__policies rte" data-product-policies>
-              {%- if cart.taxes_included -%}
-                {{ 'products.product.include_taxes' | t }}
-              {%- endif -%}
-              {%- if shop.shipping_policy.body != blank -%}
-                {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
-              {%- endif -%}
-            </div>
-          {%- endif -%}
-
-          {% capture "form_classes" -%}
-            product-form product-form-{{ section.id }}
-            {%- if section.settings.enable_payment_button and product.has_only_default_variant %} product-form--payment-button-no-variants {%- endif -%}
-            {%- if current_variant.available == false %} product-form--variant-sold-out {%- endif -%}
-          {%- endcapture %}
-
-          {% form 'product', product, class:form_classes, novalidate: 'novalidate', data-product-form: '' %}
-            {{ form | payment_terms }}
-
-            {% unless product.has_only_default_variant %}
-              <div class="product-form__controls-group">
-                {% for option in product.options_with_values %}
-                  <div class="selector-wrapper js product-form__item">
-                    <label for="SingleOptionSelector-{{ forloop.index0 }}">
-                      {{ option.name }}
-                    </label>
-                    <select class="single-option-selector single-option-selector-{{ section.id }} product-form__input"
-                      id="SingleOptionSelector-{{ forloop.index0 }}"
-                      data-index="option{{ forloop.index }}"
-                    >
-                      {% for value in option.values %}
-                        <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
-                {% endfor %}
-              </div>
-            {% endunless %}
-
-            <select name="id" id="ProductSelect-{{ section.id }}" class="product-form__variants no-js">
-              {% for variant in product.variants %}
-                <option value="{{ variant.id }}"
-                  {%- if variant == current_variant %} selected="selected" {%- endif -%}
-                >
-                  {{ variant.title }}  {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
-                </option>
+          {% unless product.has_only_default_variant %}
+            <div class="product-form__controls-group">
+              {% for option in product.options_with_values %}
+                <div class="selector-wrapper js product-form__item">
+                  <label for="SingleOptionSelector-{{ forloop.index0 }}">
+                    {{ option.name }}
+                  </label>
+                  <select class="single-option-selector single-option-selector-{{ section.id }} product-form__input"
+                          id="SingleOptionSelector-{{ forloop.index0 }}"
+                          data-index="option{{ forloop.index }}"
+                  >
+                    {% for value in option.values %}
+                      <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
               {% endfor %}
-            </select>
+            </div>
+          {% endunless %}
 
+          <select name="id" id="ProductSelect-{{ section.id }}" class="product-form__variants no-js">
+            {% for variant in product.variants %}
+              <option value="{{ variant.id }}"
+                  {%- if variant == current_variant %} selected="selected" {%- endif -%}
+              >
+                {{ variant.title }}  {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+              </option>
+            {% endfor %}
+          </select>
+
+
+          <div class="product__price-group">
+            <div class="product__price">
+              {% include 'product-price', variant: current_variant, show_vendor: section.settings.show_vendor %}
+            </div>
+
+            {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
+              <div class="product__policies rte" data-product-policies>
+                {%- if cart.taxes_included -%}
+                  {{ 'products.product.include_taxes' | t }}
+                {%- endif -%}
+                {%- if shop.shipping_policy.body != blank -%}
+                  {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {% capture "form_classes" -%}
+              product-form product-form-{{ section.id }}
+              {%- if section.settings.enable_payment_button and product.has_only_default_variant %} product-form--payment-button-no-variants {%- endif -%}
+              {%- if current_variant.available == false %} product-form--variant-sold-out {%- endif -%}
+            {%- endcapture %}
+          </div>
+          <div class="product-form__controls-group-wrapper">
             {% if section.settings.show_quantity_selector %}
               <div class="product-form__controls-group">
-                <div class="product-form__item">
-                  <label for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
-                  <input type="number" id="Quantity-{{ section.id }}"
-                    name="quantity" value="1" min="1" pattern="[0-9]*"
-                    class="product-form__input product-form__input--quantity" data-quantity-input
-                  >
-                </div>
+                <button class="number-minus" type="button" onclick="this.nextElementSibling.stepDown(); this.nextElementSibling.onchange();">-</button>
+                <input type="number" id="Quantity-{{ section.id }}"
+                       name="quantity" value="1" min="1" pattern="[0-9]*"
+                       class="product-form__input product-form__input--quantity" data-quantity-input
+                >
+                <button class="number-plus" type="button" onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.onchange();">+</button>
               </div>
             {% endif %}
 
-            <div class="product-form__error-message-wrapper product-form__error-message-wrapper--hidden{% if section.settings.enable_payment_button %} product-form__error-message-wrapper--has-payment-button{% endif %}"
-              data-error-message-wrapper
-              role="alert"
-            >
-              <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
-              {% include 'icon-error' %}
-              <span class="product-form__error-message" data-error-message>{{ 'products.product.quantity_minimum_message' | t }}</span>
-            </div>
-
             <div class="product-form__controls-group product-form__controls-group--submit">
               <div class="product-form__item product-form__item--submit
-                {%- if section.settings.enable_payment_button %} product-form__item--payment-button {%- endif -%}
-                {%- if product.has_only_default_variant %} product-form__item--no-variants {%- endif -%}"
+                  {%- if section.settings.enable_payment_button %} product-form__item--payment-button {%- endif -%}
+                  {%- if product.has_only_default_variant %} product-form__item--no-variants {%- endif -%}"
               >
                 <button type="submit" name="add"
-                  {% unless current_variant.available %} aria-disabled="true"{% endunless %}
-                  aria-label="{% unless current_variant.available %}{{ 'products.product.sold_out' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endunless %}"
-                  class="btn product-form__cart-submit{% if section.settings.enable_payment_button and product.selling_plan_groups == empty %} btn--secondary-accent{% endif %}"
+                    {% unless current_variant.available %} aria-disabled="true"{% endunless %}
+                        aria-label="{% unless current_variant.available %}{{ 'products.product.sold_out' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endunless %}"
+                        class="custom-product-form__cart-submit btn product-form__cart-submit{% if section.settings.enable_payment_button and product.selling_plan_groups == empty %} btn--secondary-accent{% endif %}"
                   {% if settings.enable_ajax %}aria-haspopup="dialog"{% endif %}
-                  data-add-to-cart>
-                  <span data-add-to-cart-text>
-                    {% unless current_variant.available %}
-                      {{ 'products.product.sold_out' | t }}
-                    {% else %}
-                      {{ 'products.product.add_to_cart' | t }}
-                    {% endunless %}
-                  </span>
+                        data-add-to-cart>
+                    <span data-add-to-cart-text>
+                      {% unless current_variant.available %}
+                        {{ 'products.product.sold_out' | t }}
+                      {% else %}
+                        {{ 'products.product.add_to_cart' | t }}
+                      {% endunless %}
+                    </span>
                   <span class="hide" data-loader>
-                    {% include 'icon-spinner' %}
-                  </span>
+                      {% include 'icon-spinner' %}
+                    </span>
                 </button>
                 {% if section.settings.enable_payment_button %}
                   {{ form | payment_button }}
                 {% endif %}
               </div>
             </div>
-          {% endform %}
+          </div>
+          <div class="product-form__error-message-wrapper product-form__error-message-wrapper--hidden{% if section.settings.enable_payment_button %} product-form__error-message-wrapper--has-payment-button{% endif %}"
+               data-error-message-wrapper
+               role="alert"
+          >
+            <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
+            {% include 'icon-error' %}
+            <span class="product-form__error-message" data-error-message>{{ 'products.product.quantity_minimum_message' | t }}</span>
+          </div>
+
+        {% endform %}
+
+
+
         </div>
 
         {%- comment -%}

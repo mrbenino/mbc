@@ -59,22 +59,23 @@
   {% endif %}
 
   <header class="custom-header site-header{% if section.settings.align_logo == 'left' %} border-bottom logo--left{% else %} logo--center{% endif %}" role="banner">
+    {% unless linklists[section.settings.main_linklist] == blank %}
+      <button type="button" class="btn--link site-header__icon site-header__menu js-mobile-nav-toggle mobile-nav--open" aria-controls="MobileNav"  aria-expanded="false" aria-label="{{ 'layout.navigation.menu' | t }}">
+        {% include 'icon-hamburger' %}
+        {% include 'icon-close' %}
+      </button>
+    {% endunless %}
     <div class="grid grid--no-gutters grid--table site-header__mobile-nav">
       {% if section.settings.align_logo == 'center' %}
         {%- assign logo_classes = 'medium-up--one-third medium-up--push-one-third logo-align--center' -%}
       {% else %}
         {%- assign logo_classes = 'medium-up--one-quarter logo-align--left' -%}
       {% endif %}
-      {% unless linklists[section.settings.main_linklist] == blank %}
-        <button type="button" class="btn--link site-header__icon site-header__menu js-mobile-nav-toggle mobile-nav--open" aria-controls="MobileNav"  aria-expanded="false" aria-label="{{ 'layout.navigation.menu' | t }}">
-          {% include 'icon-hamburger' %}
-          {% include 'icon-close' %}
-        </button>
-      {% endunless %}
+
       <div class="grid__item {{ logo_classes }}">
         {% comment %}
           Use the uploaded logo from theme settings if enabled.
-          Site name gets precedence with H1 tag on homepage, div on other pages.
+          Site name gets precedence with H1 tag on hom epage, div on other pages.
         {% endcomment %}
         {% if request.page_type == 'index' %}
           <h1 class="h2 site-header__logo">
@@ -179,7 +180,7 @@
             <button class="search-bar__submit search-form__submit"
                     type="submit"
                     data-search-form-submit>
-              {% include 'icon-search' %}
+              {% include 'icon-search-light' %}
               <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span>
             </button>
           </form>
@@ -489,7 +490,7 @@
         "zh-TW": "自訂商標寬度"
       },
       "min": 50,
-      "max": 250,
+      "max": 270,
       "step": 5,
       "unit": "px",
       "default": 100
