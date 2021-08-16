@@ -2801,11 +2801,15 @@ hr {
 
 /*================ Add to cart form ================*/
 .product-single__meta form {
-  background: rgba(32, 32, 32, 0.05);
   padding: 25px 20px 40px 20px;
   transform: translateX(-20px);
-  width: 100vw;
+  width: 100%;
 }
+
+@media only screen and (max-width: 749px) {
+  .product-single__meta form {
+    background: rgba(32, 32, 32, 0.05);
+    width: 100vw; } }
 
 .product-form {
   width: auto;
@@ -2824,6 +2828,11 @@ hr {
 
 .product-form__controls-group {
   display: flex; }
+
+.custom-select.product-form__controls-group {
+  display: grid;
+  grid-template-columns: minmax(200px, 293px);
+}
 
 .product-form__controls-group input {
   width: 63px;
@@ -2853,7 +2862,7 @@ hr {
 
 .product-form__controls-group .number-minus:hover,
 .product-form__controls-group .number-plus:hover {
-  box-shadow: inset 0px 2px 2px rgb(0 0 0 / 13%); }
+  box-shadow: inset 0px 2px 2px rgba(0, 0, 0 , 0.13); }
 
 .product-form__controls-group .number-plus {
   width: 44px;
