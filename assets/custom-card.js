@@ -1,6 +1,7 @@
 function openCard() {
     viewCardBar()
     window.listenerQuantityProduct = quantityProduct
+
 }
 
 async function viewCardBar() {
@@ -17,7 +18,8 @@ async function viewCardBar() {
 }
 
 function actionCardClose() {
-    alert('cli cli !!@##@')
+    document.querySelector('.popup-card').classList.toggle('hidden')
+    document.querySelector('.popup-card__bar-product-wrapper').innerHTML = ''
 }
 
 async function getResponse(url = '/cart.js') {
@@ -74,8 +76,6 @@ async function showCartProduct() {
     let r = await getResponse();
 
     let raw = r.items
-
-    let responseCart = document.createElement('div')
 
     let product = document.createElement('div')
     let html = ''
