@@ -130,20 +130,20 @@
 .product-compare-price {
   display: inline-block;
   font-style: normal;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 20px;
-  color: #CC0000;
-}
-
-.product-price {
-  display: inline-block;
-  font-style: normal;
   font-weight: normal;
   font-size: 16px;
   line-height: 20px;
   text-decoration-line: line-through;
   color: #B4B4B4;
+}
+
+.product-price {
+  display: inline-block;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 20px;
+  color: #CC0000;
 }
 
 .popup-card__bar-subtotal {

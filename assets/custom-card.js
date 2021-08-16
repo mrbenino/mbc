@@ -10,7 +10,7 @@ async function viewCardBar(popup) {
     let cardBar = document.createElement("div")
     cardBar.innerHTML = '' +
         '<div class="popup-card__bar-head">' +
-        '<div class="popup-card__bar-head-title">Cart (<span class="popup-card__bar-head-qualete">8</span>items)</div>' +
+        '<div class="popup-card__bar-head-title">Cart (<span class="popup-card__bar-head-qualete"></span>items)</div>' +
         '<button class="popup-card__bar-close" onclick="actionCardClose()"><svg width="26" height="25" fill="none" xmlns="http://www.w3.org/2000/svg"><path stroke="#202020" d="m1.354.646 24 24M.646 24.646l24-24"/></svg></button>' +
         '</div>' +
         '<div class="popup-card__bar-product-wrapper loading">' +
@@ -104,12 +104,32 @@ async function showCartProduct() {
 
     let items = await responseProducts(raw)
 
+
+
+    // items.other.variants.forEach(variant => {
+    //      if (variant.id === items.variant_id) {
+    //          console.log(variant)
+    //      }
+    //
+    //      return
+    // })
+
     items.forEach(item => {
+        console.log(item);
+
+        let compare_price = ''
+        item.other.variants.forEach(variant => {
+             if (variant.id === item.variant_id) {
+                 compare_price = variant.compare_at_price
+             }
+
+             return
+        })
 
         let product_title = item.product_title ? '<div>' + item.product_title + '</div>' : '';
         let variant_title = item.variant_title ? '<div>' + item.variant_title + '</div>' : '';
-        let compare_at_price = item.other.compare_at_price ? '<div class="product-compare-price decimal-js">' + item.other.compare_at_price + '</div>' : '';
-        let line_price = item.line_price ? '<div class="product-price decimal-js">' + item.line_price + '</div>' : '';
+        let compare_at_price = compare_price ? '<div class="product-compare-price decimal-js">' + compare_price + '</div>' : '';
+        let line_price = item.price ? '<div class="product-price decimal-js">' + item.price + '</div>' : '';
 
         html +=
             '<div class="item-inner">' +
@@ -120,12 +140,12 @@ async function showCartProduct() {
             product_title +
             variant_title +
             '<div class="price-group">' +
-            compare_at_price +
             line_price +
+            compare_at_price +
             '</div>' +
             '<div class="product-form__controls-group">\n' +
             '<button class="number-minus" type="button" onclick="this.nextElementSibling.stepDown(); this.nextElementSibling.oninput();">-</button>\n' +
-            '<input data-id="' + item.id + '" type="number"' +
+            '<input data-id="' + item.variant_id + '" type="number" data-handle="' + item.handle + '" type="number"' +
             'name="quantity" value="' + item.quantity + '" min="1" pattern="[0-9]*"' +
             'class="product-form__input product-form__input--quantity" data-quantity-input oninput="listenerQuantityProduct(this)">' +
             '<button class="number-plus" type="button" onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.oninput();">+</button>\n' +
@@ -149,17 +169,37 @@ async function showCartProduct() {
 function priceSeparator() {
     let priceArray = document.querySelectorAll('.decimal-js')
     priceArray.forEach(e => {
-        e.innerHTML = decimalSeparator(e.textContent)
+        e.innerHTML = decimalSeparator(e.textContent);
     })
 }
 
 function decimalSeparator(number) {
-    return number.replace(/^(.+)(.{2})$/i, '$1.$2');
+    return number.replace(/^(\d*)([\d])(\d{2})$/, '$1$2.$3');
 }
 
 async function quantityProduct(e) {
-    let updates = {}
-    updates[e.dataset.id] = e.value
-    await setCart('/cart/update.js', {updates})
-}
 
+    let response = await setCart('/cart/change.js', {
+        'id': e.dataset.id,
+        'quantity': e.value
+    })
+    console.log('response',response);
+    //
+    // let product = await getResponse('/products/' + e.dataset.handle + '.js');
+    //
+    // console.log('product', product);
+    let final_line_price = ''
+    response.items.forEach(item => {
+        if (item.id == e.dataset.id) {
+            final_line_price= item.final_line_price
+        }
+
+        return
+    })
+
+    document.querySelector('.popup-card__bar-head-qualete').innerHTML = response.item_count
+    document.querySelector('.popup-card__bar-subtotal').innerHTML = response.total_price
+    e.closest('.product-info').querySelector('.product-price').innerHTML = final_line_price
+
+    priceSeparator()
+}
