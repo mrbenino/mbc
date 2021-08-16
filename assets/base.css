@@ -19,6 +19,10 @@
   top: 0;
 }
 
+.popup-card__bar-product-wrapper {
+  overflow: auto;
+}
+
 .popup-card__bar-product-wrapper.loading:after {
   content: "";
   position: absolute;
@@ -109,6 +113,10 @@
   top: 0;
   left: 0;
   background: rgba(39, 45, 63, 0.8);
+}
+
+.popup-card.hidden {
+  top: -99999px;
 }
 
 .popup-card__bar-inner-subtotal {
@@ -305,6 +313,7 @@
 
 .item-inner .product-form__input--quantity {
   width: 61px;
+  padding: 0;
 }
 
 .item-inner .popup-card__bar-bottom {

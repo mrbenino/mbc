@@ -1,40 +1,18 @@
 function openCard() {
-    let popup = document.createElement("div")
-    popup.classList.add('popup-card')
-    document.body.append(popup)
-    viewCardBar(popup)
+    viewCardBar()
     window.listenerQuantityProduct = quantityProduct
 }
 
-async function viewCardBar(popup) {
-    let cardBar = document.createElement("div")
-    cardBar.innerHTML = '' +
-        '<div class="popup-card__bar-head">' +
-        '<div class="popup-card__bar-head-title">Cart (<span class="popup-card__bar-head-qualete"></span>items)</div>' +
-        '<button class="popup-card__bar-close" onclick="actionCardClose()"><svg width="26" height="25" fill="none" xmlns="http://www.w3.org/2000/svg"><path stroke="#202020" d="m1.354.646 24 24M.646 24.646l24-24"/></svg></button>' +
-        '</div>' +
-        '<div class="popup-card__bar-product-wrapper loading">' +
-        '</div>' +
-        '<div class="popup-card__bar-bottom">' +
-        '<div class="popup-card__bar-inner-subtotal">' +
-        '<div>Subtotal</div>' +
-        '<div class="popup-card__bar-subtotal decimal-js"></div>' +
-        '</div>' +
-        '<div class="popup-card__bar-bottom-inner-btn">' +
-        '<a class="popup-card__view-card" html="">View cart</a>' +
-        '<a class="popup-card__checkout" html="">Proceed to checkout</a>' +
-        '</div>' +
-        '</div>'
+async function viewCardBar() {
 
-    cardBar.classList.add('popup-card__bar')
-
-    popup.append(cardBar)
+    document.querySelector('.popup-card').classList.toggle('hidden')
+    document.querySelector('.popup-card__bar-product-wrapper').classList.toggle('loading')
 
     await showCartProduct()
 
     priceSeparator()
 
-    document.querySelector('.popup-card__bar-product-wrapper').classList.remove('loading')
+    document.querySelector('.popup-card__bar-product-wrapper').classList.toggle('loading')
 
 }
 
@@ -58,7 +36,7 @@ async function getResponse(url = '/cart.js') {
     }
 }
 
-async function setCart(url , data = [{}]) {
+async function setCart(url, data = [{}]) {
     try {
         const response = await fetch(url,
             {
@@ -104,32 +82,21 @@ async function showCartProduct() {
 
     let items = await responseProducts(raw)
 
-
-
-    // items.other.variants.forEach(variant => {
-    //      if (variant.id === items.variant_id) {
-    //          console.log(variant)
-    //      }
-    //
-    //      return
-    // })
-
     items.forEach(item => {
         console.log(item);
 
         let compare_price = ''
         item.other.variants.forEach(variant => {
-             if (variant.id === item.variant_id) {
-                 compare_price = variant.compare_at_price
-             }
-
-             return
+            if (variant.id === item.variant_id) {
+                compare_price = variant.compare_at_price
+            }
+            return
         })
 
         let product_title = item.product_title ? '<div>' + item.product_title + '</div>' : '';
         let variant_title = item.variant_title ? '<div>' + item.variant_title + '</div>' : '';
         let compare_at_price = compare_price ? '<div class="product-compare-price decimal-js">' + compare_price + '</div>' : '';
-        let line_price = item.price ? '<div class="product-price decimal-js">' + item.price + '</div>' : '';
+        let line_price = item.final_line_price ? '<div class="product-price decimal-js">' + item.final_line_price + '</div>' : '';
 
         html +=
             '<div class="item-inner">' +
@@ -183,17 +150,13 @@ async function quantityProduct(e) {
         'id': e.dataset.id,
         'quantity': e.value
     })
-    console.log('response',response);
-    //
-    // let product = await getResponse('/products/' + e.dataset.handle + '.js');
-    //
-    // console.log('product', product);
+    console.log('response', response);
+
     let final_line_price = ''
     response.items.forEach(item => {
         if (item.id == e.dataset.id) {
-            final_line_price= item.final_line_price
+            final_line_price = item.final_line_price
         }
-
         return
     })
 

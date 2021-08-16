@@ -285,7 +285,25 @@
   </nav>
   {% endif %}
 </div>
-
+<div class="popup-card hidden">
+  <div class="popup-card__bar">
+    <div class="popup-card__bar-head">
+      <div class="popup-card__bar-head-title">Cart (<span class="popup-card__bar-head-qualete"></span>items)</div>
+      <button class="popup-card__bar-close" onclick="actionCardClose()"><svg width="26" height="25" fill="none" xmlns="http://www.w3.org/2000/svg"><path stroke="#202020" d="m1.354.646 24 24M.646 24.646l24-24"/></svg></button>
+    </div>
+    <div class="popup-card__bar-product-wrapper"></div>
+    <div class="popup-card__bar-bottom">
+      <div class="popup-card__bar-inner-subtotal">
+        <div>Subtotal</div>
+        <div class="popup-card__bar-subtotal decimal-js"></div>
+      </div>
+      <div class="popup-card__bar-bottom-inner-btn">
+        <a class="popup-card__view-card" href="{{ routes.cart_url }}">View cart</a>
+        <a class="popup-card__checkout" href="/checkout">Proceed to checkout</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <script type="application/ld+json">
