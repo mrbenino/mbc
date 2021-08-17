@@ -140,7 +140,7 @@
             {% endif %}
           {% endif %}
 
-          <button onclick="openCard()" class="custom-card site-header__icon site-header__cart">
+          <button id="openCart" class="custom-card site-header__icon site-header__cart">
             {% include 'icon-cart' %}
             <span class="icon__fallback-text">{{ 'layout.cart.title' | t }}</span>
             <div id="CartCount" class="site-header__cart-count{% if cart.item_count == 0 %} hide{% endif %} critical-hidden" data-cart-count-bubble>
@@ -288,8 +288,8 @@
 <div class="popup-card hidden">
   <div class="popup-card__bar">
     <div class="popup-card__bar-head">
-      <div class="popup-card__bar-head-title">Cart (<span class="popup-card__bar-head-qualete"></span>items)</div>
-      <button class="popup-card__bar-close" onclick="actionCardClose()"><svg width="26" height="25" fill="none" xmlns="http://www.w3.org/2000/svg"><path stroke="#202020" d="m1.354.646 24 24M.646 24.646l24-24"/></svg></button>
+      <div class="popup-card__bar-head-title">Cart (<span class="popup-card__bar-head-quality"></span>items)</div>
+      <button class="popup-card__bar-close" onclick="listenerCardClose()"><svg width="26" height="25" fill="none" xmlns="http://www.w3.org/2000/svg"><path stroke="#202020" d="m1.354.646 24 24M.646 24.646l24-24"/></svg></button>
     </div>
     <div class="popup-card__bar-product-wrapper"></div>
     <div class="popup-card__bar-bottom">

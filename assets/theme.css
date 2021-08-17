@@ -3148,7 +3148,6 @@ hr {
 
 @media only screen and (max-width: 749px) {
   .product-single__media-group {
-    transform: translateX(-20px);
     width: 100vw;
     margin-bottom: 30px; }
   .product-single__media--has-thumbnails {
