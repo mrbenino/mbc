@@ -24,7 +24,7 @@
           "alignment": "center",
           "hero_layout": "full_width",
           "hero_size": "large",
-          "text_size": "large",
+          "text_size": "medium",
           "title": "Image with text overlay",
           "text": "<p>Use overlay text to give your customers insight into your brand. Select imagery and text that relates to your style and story.<\/p>",
           "button_label": "Start Shopping",
