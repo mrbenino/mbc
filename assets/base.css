@@ -3,7 +3,7 @@
   scroll-behavior: smooth;
 }
 
-h1 .mega-title{
+h1.mega-title{
   max-width: 563px  !important;
   margin: 0 20px  !important;
 }
