@@ -23,7 +23,7 @@
                 await this._viewCardBar()
             })
             window.listenerQuantityProduct = this._quantityProduct.bind(this)
-            window.listenerCardClose = this._actionCardClose
+            window.listenerCardClose = this._actionCardClose.bind(this)
         }
 
         this._viewCardBar = async function () {
