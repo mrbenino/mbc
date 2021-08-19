@@ -4,8 +4,9 @@
 }
 
 .custom-h1{
-  max-width: 563px  !important;
-  margin: 0 20px  !important;
+  max-width: 600px  !important;
+  margin: 0 auto  !important;
+  padding: 0 20px;
 }
 
 .custom-card {
